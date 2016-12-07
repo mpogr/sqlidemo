@@ -24,9 +24,8 @@
       $rows = mysqli_num_rows($query);
       if ($rows == 1)
       {
-        //$_SESSION['login_user']=$username; // Initializing Session
         mysqli_query($connection, "INSERT INTO sessions VALUES ('".session_id()."', '$username')");
-        header("location: profile.php"); // Redirecting To Other Page
+        header("location: profile.php"); // Redirecting To The Main Application Page
       }
       else
         $error = "Username or Password is invalid";
