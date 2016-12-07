@@ -1,4 +1,5 @@
 <?php
+  ini_set("session.cookie_lifetime", 60 * 60 * 24 * 7);
   session_start(); // Starting Session
   $error=''; // Variable To Store Error Message
   if(isset($_POST['submit']))
@@ -23,7 +24,8 @@
       $rows = mysqli_num_rows($query);
       if ($rows == 1)
       {
-        $_SESSION['login_user']=$username; // Initializing Session
+        //$_SESSION['login_user']=$username; // Initializing Session
+        mysqli_query($connection, "INSERT INTO sessions VALUES ('".session_id()."', '$username')");
         header("location: profile.php"); // Redirecting To Other Page
       }
       else

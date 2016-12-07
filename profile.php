@@ -10,7 +10,7 @@ include('session.php');
   </head>
   <body>
     <div id="profile">
-      <b id="welcome">Welcome : <i><?php echo $login_session; ?></i></b>
+      <b id="welcome">Welcome : <i><?php echo $full_name; ?></i></b>
       <b id="logout"><a href="logout.php">Log Out</a></b>
     </div>
   </body>
