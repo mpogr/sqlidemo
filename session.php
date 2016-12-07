@@ -21,6 +21,6 @@
  mysqli_close($connection); // Closing Connection
 
  if(!isset($full_name))
-  header('Location: index.php'); // Redirecting To Home Page
+  header('Location: login.php'); // Redirecting To Home Page
 
 ?>
