@@ -5,12 +5,14 @@
  // Read the MySQL password from a file
  $mysqlpassword = trim(file_get_contents(__DIR__ . "/rootpassword"));
 
- // Establishing Connection with Server by passing server_name, user_id and password as a parameter
+ // Establish connection with Server by passing server_name, user_id and password as a parameter
  $connection = mysqli_connect("localhost", "root", $mysqlpassword, "mydiary_db");
 
- // Fetch user name from based on the session (possibly persistent) first
+ // Delete the session ID from the DB table
  $ses_sql = mysqli_query($connection, "DELETE FROM sessions WHERE session_id='".session_id()."'");
  
+ mysqli_close($connection); // Closing Connection
+
  if(session_destroy()) // Destroying All Sessions
     header("Location: index.php"); // Redirecting To Home Page
 ?>
