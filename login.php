@@ -26,7 +26,7 @@
 			if($rows == 1)
 			{
 				mysqli_query($connection, "INSERT INTO sessions VALUES ('".session_id()."', '$username')");
-				header("location: profile.php"); // Redirecting To The Main Application Page
+				header("location: index.php"); // Redirecting To The Main Application Page
 			}
 			else
 				$error = "Username or Password is invalid";
