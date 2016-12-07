@@ -1,17 +1,17 @@
 <?php
-include('session.php');
+include ('session.php');
 ?>
 
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>My Secret Diary Feed</title>
-		<link href="style.css" rel="stylesheet" type="text/css">
-	</head>
-	<body>
-		<div id="profile">
-			<b id="welcome">Welcome : <i><?php echo $full_name; ?></i></b>
-			<b id="logout"><a href="logout.php">Log Out</a></b>
-		</div>
-	</body>
-</html>
+<HTML>
+<HEAD>
+<TITLE>My Secret Diary Feed</TITLE>
+<LINK href="style.css" rel="stylesheet" type="text/css">
+</HEAD>
+<BODY>
+	<DIV id="profile">
+		<B id="welcome">Welcome : <I><?php echo $full_name; ?></I></B> <B
+			id="logout"><A href="logout.php">Log Out</A></B>
+	</DIV>
+</BODY>
+</HTML>
