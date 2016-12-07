@@ -9,7 +9,7 @@ if(isset($_SESSION['login_user']))
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Login Form in PHP with Session</title>
+    <title>Login to My Secret Diary</title>
       <link href="style.css" rel="stylesheet" type="text/css">
   </head>
   <body>
