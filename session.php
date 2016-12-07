@@ -9,14 +9,21 @@
 	$connection = mysqli_connect("localhost", "root", $mysqlpassword, "mydiary_db");
 
  	// Fetch user name from based on the session first
-	$ses_sql = mysqli_query($connection, "SELECT username FROM sessions WHERE session_id='".session_id()."'");
-	$row = mysqli_fetch_assoc($ses_sql);
-	$username = $row['username'];
+	$query = mysqli_prepare($connection, "SELECT username FROM sessions WHERE session_id=?");
+	$sessionid = session_id();
+	mysqli_stmt_bind_param($query, "s", $sessionid);
+	mysqli_stmt_execute($query);
+	mysqli_stmt_bind_result($query, $username);
+	mysqli_stmt_fetch($query);
+
+	$connection = mysqli_connect("localhost", "root", $mysqlpassword, "mydiary_db");
 
 	// SQL Query To Fetch Complete Information Of the User
-	$ses_sql=mysqli_query($connection, "SELECT full_name FROM users WHERE username='$username'");
-	$row = mysqli_fetch_assoc($ses_sql);
-	$full_name =$row['full_name'];
+	$query = mysqli_prepare($connection, "SELECT full_name FROM users WHERE username=?");
+	mysqli_stmt_bind_param($query, "s", $username);
+        mysqli_stmt_execute($query);
+        mysqli_stmt_bind_result($query, $full_name);
+        mysqli_stmt_fetch($query);
 
 	mysqli_close($connection); // Closing Connection
 

@@ -9,7 +9,10 @@
 	$connection = mysqli_connect("localhost", "root", $mysqlpassword, "mydiary_db");
 
 	// Delete the session ID from the DB table
-	$ses_sql = mysqli_query($connection, "DELETE FROM sessions WHERE session_id='".session_id()."'");
+	$query = mysqli_prepare($connection, "DELETE FROM sessions WHERE session_id=?");
+	$sessionid = session_id();
+	mysqli_stmt_bind_param($query, "s", $sessionid);
+	mysqli_stmt_execute($query);
  
 	mysqli_close($connection); // Closing Connection
 
