@@ -9,32 +9,69 @@ include ("session.php");
 // On submit form, do
 if (isset($_POST['submit']))
 {    
-    // Define $username and $password
+    // Get the old and the new passwords from the user input
     $oldpassword = $_POST['current_password'];
     $newpassword = $_POST['new_password1'];
     
-    // Establishing Connection with Server by passing server_name, user_id and password as a parameter
+    // Establishing connection with the server
     $connection = mysqli_connect("localhost", "root", $mysqlpassword, "mydiary_db");
-
-    // Update the user's password
-    if($noinjection)
+    
+    // Use SQL prepared queries to avoid SQL injection
+    $query = mysqli_prepare($connection, "SELECT password FROM users WHERE username=?");
+    
+    // Use the username as a parameter for the prepared query
+    mysqli_stmt_bind_param($query, "s", $username);
+    
+    // Execute the query
+    mysqli_stmt_execute($query);
+    
+    // Get the hashed password
+    mysqli_stmt_bind_result($query, $hashedpassword);
+    mysqli_stmt_fetch($query);
+    mysqli_stmt_close($query);
+    
+    // We assume failure by default
+    $result = false;
+    $numrows = -1;
+    
+    // If we've got a match, proceed with the password update
+    if (password_verify($oldpassword, $hashedpassword))
     {
-        $query = mysqli_prepare($connection, "UPDATE users SET password=? WHERE username=? AND password=?");
-        mysqli_stmt_bind_param($query, "sss", $newpassword, $username, $oldpassword);
-        $result = mysqli_stmt_execute($query);
-    }
-    else 
-    {
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // Second order SQL Injection!!!!!!!!!!!!!!!!!!
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        $query = "UPDATE users SET password='".$newpassword."' WHERE username='".$username."' AND password='".$oldpassword."'";    
-        $result = mysqli_query($connection, $query);
+        // Update the user's password
+        if($noinjection)
+        {
+            // Prepare the parameterised SQL query to avoid SQL second order SQL injection
+            $query = mysqli_prepare($connection, "UPDATE users SET password=? WHERE username=?");
+            
+            // Declare hashed password and username as parameters
+            mysqli_stmt_bind_param($query, "ss", password_hash($newpassword, PASSWORD_DEFAULT), $username);
+            
+            // Run the quesry
+            $result = mysqli_stmt_execute($query);
+            
+            // Get the number of affected rows, should be 1 if the update was successful
+            $numrows = mysqli_affected_rows($connection);
+            
+            // Close the query statement
+            mysqli_stmt_close($query);
+        }
+        else
+        {
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            // Second order SQL Injection!!!!!!!!!!!!!!!!!!
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            $query = "UPDATE users SET password='".password_hash($newpassword, PASSWORD_DEFAULT)."' WHERE username='".$username."'";
+            $result = mysqli_query($connection, $query);
+            
+            // Get the number of affected rows, should be 1 if the update was successful
+            $numrows = mysqli_affected_rows($connection);
+        }
     }
     
-    $numrows = mysqli_affected_rows($connection);
-    mysqli_close($connection); // Closing Connection
-          
+    // Close the connection
+    mysqli_close($connection);
+    
+    // If the query result was successful AND the number of the affected rows was 1
     if($result && $numrows == 1)
     {
         $alerttype = "success";
@@ -46,6 +83,7 @@ if (isset($_POST['submit']))
         $message = "You password has not been updated successsfully, try again!";
     }
     
+    // Put up the notification message
     echo "<div id='floating_alert' style='position:absolute;top:20px;right:20px;z-index:5000;' class='alert alert-".$alerttype." fade in'>".
         "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>".
         "<span aria-hidden='true'>&times;</span>".

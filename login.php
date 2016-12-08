@@ -7,11 +7,13 @@ include ("common.php");
 $error = "";
 
 // On submit form, do
-if (isset($_POST['submit'])) {
+if (isset($_POST['submit']))
+{
     // If any of the input fields provided is empty, display the error message
     if (empty($_POST['username']) || empty($_POST['password']))
         $error = "Username or Password is invalid";
-    else {
+    else
+    {
         // Define $username and $password
         $username = $_POST['username'];
         $password = $_POST['password'];
@@ -20,23 +22,22 @@ if (isset($_POST['submit'])) {
         $connection = mysqli_connect("localhost", "root", $mysqlpassword, "mydiary_db");
         
         // Use SQL prepared queries to avoid SQL injection
-        $query = mysqli_prepare($connection, "SELECT username FROM users WHERE password=? AND username=?");
+        $query = mysqli_prepare($connection, "SELECT password FROM users WHERE username=?");
         
-        // Use password and username as parameters for the prepared query
-        mysqli_stmt_bind_param($query, "ss", $password, $username);
+        // Use the username as a parameter for the prepared query
+        mysqli_stmt_bind_param($query, "s", $username);
         
         // Execute the query
         mysqli_stmt_execute($query);
         
-        // Get the username into a temporary variable
-        mysqli_stmt_bind_result($query, $col1);
+        // Get the hashed password into a temporary variable
+        mysqli_stmt_bind_result($query, $hashedpassword);
         mysqli_stmt_fetch($query);
+        mysqli_stmt_close($query);
         
         // If we've got a match, store the session ID in its respecitve table
-        if ($col1 == $username) {
-            // Open the connection again (why?)
-            $connection = mysqli_connect("localhost", "root", $mysqlpassword, "mydiary_db");
-            
+        if (password_verify($password, $hashedpassword))
+        {
             // Create another prepared query
             $query = mysqli_prepare($connection, "INSERT INTO sessions VALUES (?, ?)");
             
@@ -48,14 +49,16 @@ if (isset($_POST['submit'])) {
             
             // Execute the query
             mysqli_stmt_execute($query);
+            mysqli_stmt_close($query);
             
-            // Redirect to the default page
-            header("location: index.php"); // Redirecting To The Main Application Page
-        } else
+            // Redirect to the main page
+            header("location: index.php");
+        }
+        else
             // If something went wrong, the credentials must be invalid
-            $error = "Username or Password is invalid";
-            
-            // Close the DB connection
+            $error = "Username or Password is invalid";    
+
+        // Close the DB connection
         mysqli_close($connection);
     }
 }
@@ -81,7 +84,7 @@ if (isset($_POST['submit'])) {
 
 	<div class="container">
 		<form class="form-signin" action="" method="post">
-			<h2 class="form-signin-heading">Login to My Secret Diary</h2>
+			<h2 class="form-signin-heading">Login to<br>My Secret Diary</h2>
 			<label for="inputUsername" class="sr-only">Username:</label>
 			<input type="text" id="username" name="username" class="input-lg form-control" placeholder="Username" autocomplete="off" required autofocus>
 			<label for="inputPassword" class="sr-only">Password:</label>
