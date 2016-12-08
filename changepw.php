@@ -1,8 +1,5 @@
 <?php
 
-// This variable controls SQL injections
-$noinjection = false;
-
 // Include some common actions
 include ("session.php");
 
@@ -41,26 +38,18 @@ if (isset($_POST['submit']))
         $newhashedpassword = password_hash($newpassword, PASSWORD_DEFAULT);
         
         // Update the user's password
-        if($noinjection)
-        {
-            // Prepare the parameterised query to avoid second order SQL injection
-            $query = mysqli_prepare($connection, "UPDATE users SET password=? WHERE username=?");
+        
+        // Prepare the parameterised query to avoid second order SQL injection
+        $query = mysqli_prepare($connection, "UPDATE users SET password=? WHERE username=?");
             
-            // Declare hashed password and username as parameters
-            mysqli_stmt_bind_param($query, "ss", $newhashedpassword, $username);
+        // Declare hashed password and username as parameters
+        mysqli_stmt_bind_param($query, "ss", $newhashedpassword, $username);
             
-        }
-        else
-        {
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // Second order SQL Injection!!!!!!!!!!!!!!!!!!
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // Prepare the parameterised query to avoid second order SQL injection
-            $query = mysqli_prepare($connection, "UPDATE users SET password=? WHERE username='".$username."'");
-            
-            // Declare hashed password and username as parameters
-            mysqli_stmt_bind_param($query, "s", $newhashedpassword);
-        }
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // Second order SQL Injection!!!!!!!!!!!!!!!!!!
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //$query = mysqli_prepare($connection, "UPDATE users SET password=? WHERE username='".$username."'");
+        //mysqli_stmt_bind_param($query, "s", $newhashedpassword);
         
         // Run the query
         $result = mysqli_stmt_execute($query);
