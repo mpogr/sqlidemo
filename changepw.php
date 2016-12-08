@@ -1,5 +1,8 @@
 <?php
 
+// This variable controls SQL injections
+$noinjection = false;
+
 // Include some common actions
 include ("session.php");
 
@@ -14,12 +17,24 @@ if (isset($_POST['submit']))
     $connection = mysqli_connect("localhost", "root", $mysqlpassword, "mydiary_db");
 
     // Update the user's password
-    $query = mysqli_prepare($connection, "UPDATE users SET password=? WHERE password=? AND username=?");
-    mysqli_stmt_bind_param($query, "sss", $newpassword, $oldpassword, $username);
-    $result = mysqli_stmt_execute($query);
+    if($noinjection)
+    {
+        $query = mysqli_prepare($connection, "UPDATE users SET password=? WHERE username=? AND password=?");
+        mysqli_stmt_bind_param($query, "sss", $newpassword, $username, $oldpassword);
+        $result = mysqli_stmt_execute($query);
+    }
+    else 
+    {
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // Second order SQL Injection!!!!!!!!!!!!!!!!!!
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        $query = "UPDATE users SET password='".$newpassword."' WHERE username='".$username."' AND password='".$oldpassword."'";    
+        $result = mysqli_query($connection, $query);
+    }
+    
     $numrows = mysqli_affected_rows($connection);
     mysqli_close($connection); // Closing Connection
-    
+          
     if($result && $numrows == 1)
     {
         $alerttype = "success";
