@@ -1,11 +1,9 @@
 <?php
-// Make sure we use persistent cookies valid for 7 days
-ini_set("session.cookie_lifetime", 60 * 60 * 24 * 7);
 
-// Start the session
-session_start();
+// Include some common actions
+include ("common.php");
 
-// Error messages go her
+// Error messages go here
 $error = "";
 
 // On submit form, do
@@ -17,9 +15,6 @@ if (isset($_POST['submit'])) {
         // Define $username and $password
         $username = $_POST['username'];
         $password = $_POST['password'];
-        
-        // Read the MySQL password from the file
-        $mysqlpassword = trim(file_get_contents(__DIR__ . "/rootpassword"));
         
         // Establish connection with the server by passing server_name, user_id and password as parameters
         $connection = mysqli_connect("localhost", "root", $mysqlpassword, "mydiary_db");
@@ -69,22 +64,58 @@ if (isset($_POST['submit'])) {
 <!DOCTYPE html>
 <HTML>
 <HEAD>
-<TITLE>Login to My Secret Diary</TITLE>
-<LINK href="style.css" rel="stylesheet" type="text/css">
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<TITLE>Login to My Secret Diary</TITLE>
+
+	<LINK href="/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="signin.css" rel="stylesheet">
 </HEAD>
 <BODY>
-	<DIV id="main">
-		<H1>My Secret Diary</H1>
-		<DIV id="login">
-			<H2>Login to My Secret Diary</H2>
-			<FORM action="" method="post">
-				<LABEL>User Name :</LABEL> <INPUT id="name" name="username"
-					placeholder="username" type="text"> <LABEL>Password :</LABEL> <INPUT
-					id="password" name="password" placeholder="**********"
-					type="password"> <INPUT name="submit" type="submit" value=" Login ">
-				<SPAN><?php echo $error; ?></SPAN>
-			</FORM>
-		</DIV>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+
+	<div class="container">
+		<form class="form-signin" action="" method="post">
+			<h2 class="form-signin-heading">Login to My Secret Diary</h2>
+			<label for="inputUsername" class="sr-only">Username:</label>
+			<input type="text" id="username" name="username" class="input-lg form-control" placeholder="Username" autocomplete="off" required autofocus>
+			<label for="inputPassword" class="sr-only">Password:</label>
+			<input type="password" id="password" name="password" class="input-lg form-control" placeholder="Password" autocomplete="off" required>
+			<SPAN style="color:#FF0004;"><?php echo $error; ?></SPAN>
+			<button class="col-xs-12 btn btn-primary btn-load btn-lg" id="login_button" name="submit" type="submit" disabled>Login</button>
+		</FORM>
 	</DIV>
+	<script>
+        // Password validation script
+        $("input[type=password]").change(function(){
+        	if($("#password").val() != "" && $("#username").val() != "")
+        		$("#login_button").prop("disabled", false);
+        	else
+        		$("#login_button").prop("disabled", true);
+        });
+        $("input[type=text]").change(function(){
+        	if($("#password").val() != "" && $("#username").val() != "")
+        		$("#login_button").prop("disabled", false);
+        	else
+        		$("#login_button").prop("disabled", true);
+        });
+        $("input[type=password]").keyup(function(){
+        	if($("#password").val() != "" && $("#username").val() != "")
+        		$("#login_button").prop("disabled", false);
+        	else
+        		$("#login_button").prop("disabled", true);
+        });
+        $("input[type=text]").keyup(function(){
+        	if($("#password").val() != "" && $("#username").val() != "")
+        		$("#login_button").prop("disabled", false);
+        	else
+        		$("#login_button").prop("disabled", true);
+        });
+    </script>
 </BODY>
 </HTML>
