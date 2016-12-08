@@ -37,35 +37,39 @@ if (isset($_POST['submit']))
     // If we've got a match, proceed with the password update
     if (password_verify($oldpassword, $hashedpassword))
     {
+        // Get the new hashed password
+        $newhashedpassword = password_hash($newpassword, PASSWORD_DEFAULT);
+        
         // Update the user's password
         if($noinjection)
         {
-            // Prepare the parameterised SQL query to avoid SQL second order SQL injection
+            // Prepare the parameterised query to avoid second order SQL injection
             $query = mysqli_prepare($connection, "UPDATE users SET password=? WHERE username=?");
             
             // Declare hashed password and username as parameters
-            mysqli_stmt_bind_param($query, "ss", password_hash($newpassword, PASSWORD_DEFAULT), $username);
+            mysqli_stmt_bind_param($query, "ss", $newhashedpassword, $username);
             
-            // Run the quesry
-            $result = mysqli_stmt_execute($query);
-            
-            // Get the number of affected rows, should be 1 if the update was successful
-            $numrows = mysqli_affected_rows($connection);
-            
-            // Close the query statement
-            mysqli_stmt_close($query);
         }
         else
         {
             // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // Second order SQL Injection!!!!!!!!!!!!!!!!!!
             // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            $query = "UPDATE users SET password='".password_hash($newpassword, PASSWORD_DEFAULT)."' WHERE username='".$username."'";
-            $result = mysqli_query($connection, $query);
+            // Prepare the parameterised query to avoid second order SQL injection
+            $query = mysqli_prepare($connection, "UPDATE users SET password=? WHERE username='".$username."'");
             
-            // Get the number of affected rows, should be 1 if the update was successful
-            $numrows = mysqli_affected_rows($connection);
+            // Declare hashed password and username as parameters
+            mysqli_stmt_bind_param($query, "s", $newhashedpassword);
         }
+        
+        // Run the query
+        $result = mysqli_stmt_execute($query);
+        
+        // Get the number of affected rows, should be 1 if the update was successful
+        $numrows = mysqli_affected_rows($connection);
+        
+        // Close the query statement
+        mysqli_stmt_close($query);
     }
     
     // Close the connection
