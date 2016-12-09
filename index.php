@@ -62,6 +62,8 @@ include ("session.php");
           			<ul class="nav nav-pills nav-stacked">
             			<li><a href="logout.php">Log Out</a></li>
             			<li><a href="changepw.php">Change Password</a></li>
+            			<li><a href="donation.php">Donate $5</a></li>
+            			<li class="pull-right" style="background-color: #269030;color: white;width: 48%;height: 100%;font-size: 16px;"><?php if(!isset($donation)) $donation = 0; echo "Total donations so far: $".$donation; ?></li>
           			</ul><br>
         		</div>
     
