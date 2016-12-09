@@ -62,8 +62,16 @@ include ("session.php");
           			<ul class="nav nav-pills nav-stacked">
             			<li><a href="logout.php">Log Out</a></li>
             			<li><a href="changepw.php">Change Password</a></li>
-            			<li><a href="donation.php">Donate $5</a></li>
-            			<li class="pull-right" style="background-color: #269030;color: white;width: 48%;height: 100%;font-size: 16px;"><?php if(!isset($donation)) $donation = 0; echo "Total donations so far: $".$donation; ?></li>
+            			<li>
+            				<span class="navbar-text navbar-left" style="color: #337ab7">Donate:</span>
+            					<form class="navbar-form navbar-right" action="donation.php" method="post">
+            						<input type="text" class="form-control" placeholder="Amount" name="amount" required autocomplete="off">
+            						<button type="submit" class="btn btn-primary">OK</button>
+            					</form>
+            			</li>
+            			<li style="padding-right:3.2%;">
+            				<p class="lead navbar-text navbar-right navbar-dark bg-primary" style="background-color: #00aa00;"><?php if(!isset($donation)) $donation = 0; echo "Total donations so far: $".$donation; ?></p>
+            			</li>
           			</ul><br>
         		</div>
     
