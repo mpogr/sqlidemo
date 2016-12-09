@@ -2,7 +2,7 @@
 
     // Include some common actions
     include ("common.php");
-    
+     
     // Establish the connection with the server by passing the server name, user ID and password as parameters
     $connection = mysqli_connect("localhost", "root", $mysqlpassword, "mydiary_db");
     
@@ -35,9 +35,5 @@
         
         // Close the DB connection
         mysqli_close($connection);
-        
-        // If the full user name is emput, redirect to the login page
-        if (! isset($full_name))
-            header('Location: login.php');
     }
 ?>

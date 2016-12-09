@@ -39,13 +39,16 @@ if (isset($_POST['submit']))
         if (password_verify($password, $hashedpassword))
         {
             // Create another prepared query
-            $query = mysqli_prepare($connection, "INSERT INTO sessions VALUES (?, ?)");
+            $query = mysqli_prepare($connection, "INSERT INTO sessions VALUES (?, ?, ?)");
             
             // Get the session ID
             $sessionid = session_id();
             
+            // Create a secret form key
+            $secretkey = random_int(PHP_INT_MIN, PHP_INT_MAX);
+            
             // Bind the paramters to the session ID and the user name
-            mysqli_stmt_bind_param($query, "ss", $sessionid, $username);
+            mysqli_stmt_bind_param($query, "ssi", $sessionid, $username, $secretkey);
             
             // Execute the query
             mysqli_stmt_execute($query);

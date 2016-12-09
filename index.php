@@ -1,5 +1,20 @@
 <?php
-include ("session.php");
+    include ("session.php");
+    
+    // Establish the connection with the server by passing the server name, user ID and password as parameters
+    $connection = mysqli_connect("localhost", "root", $mysqlpassword, "mydiary_db");
+    
+    // Create secret temporary key
+    $secretkey = random_int(PHP_INT_MIN, PHP_INT_MAX);
+    
+    //Put the temporary secret key into the DB
+    $query = mysqli_prepare($connection, "UPDATE sessions SET secret_form_key=? WHERE session_id=?");
+    mysqli_stmt_bind_param($query, "is", $secretkey, $sessionid);
+    mysqli_stmt_execute($query);
+    mysqli_stmt_close($query);
+    
+    // Close the DB connection
+    mysqli_close($connection);
 ?>
 
 <!DOCTYPE html>
@@ -66,6 +81,7 @@ include ("session.php");
             				<span class="navbar-text navbar-left" style="color: #337ab7">Donate:</span>
             					<form class="navbar-form navbar-right" action="donation.php" method="post">
             						<input type="text" class="form-control" placeholder="Amount" name="amount" required autocomplete="off">
+            						<input type="hidden" name="secret_form_key" value="<?php echo $secretkey; ?>">
             						<button type="submit" class="btn btn-primary">OK</button>
             					</form>
             			</li>
