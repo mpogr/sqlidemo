@@ -43,9 +43,9 @@ if (isset($_POST['submit']))
         // Second order SQL Injection!!!!!!!!!!!!!!!!!!
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         
-        //$query = mysqli_prepare($connection, "UPDATE users SET password=? WHERE username='".$username."'");
+        $query = mysqli_prepare($connection, "UPDATE users SET password=? WHERE username='".$username."'");
         
-        //mysqli_stmt_bind_param($query, "s", $newhashedpassword);
+        mysqli_stmt_bind_param($query, "s", $newhashedpassword);
         
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // End of second order SQL Injection!!!!!!!!!!!!!!!!!!
@@ -57,10 +57,10 @@ if (isset($_POST['submit']))
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         
         // Prepare the parameterised query to avoid second order SQL injection
-        $query = mysqli_prepare($connection, "UPDATE users SET password=? WHERE username=?");
+        //$query = mysqli_prepare($connection, "UPDATE users SET password=? WHERE username=?");
         
         // Declare hashed password and username as parameters
-        mysqli_stmt_bind_param($query, "ss", $newhashedpassword, $username);
+        //mysqli_stmt_bind_param($query, "ss", $newhashedpassword, $username);
         
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // End of the correct code preventing second order SQL Injection!!!!!!!!!!!!!!!!!!

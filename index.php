@@ -65,7 +65,7 @@
     	<div class="container-fluid">
     		<div class="row content">
     			<div class="col-sm-3 sidenav">
-    				<h4><?php if(isset($full_name)) echo $full_name; ?>'s Diary</h4>
+    				<h4><?php echo $full_name; ?>'s Diary</h4>
           			<div class="input-group">
             			<input type="text" class="form-control" placeholder="Search Diary...">
             			<span class="input-group-btn">
@@ -86,14 +86,14 @@
             					</form>
             			</li>
             			<li style="padding-right:3.2%;">
-            				<p class="lead navbar-text navbar-right navbar-dark bg-primary" style="background-color: #00aa00;"><?php if(!isset($donation)) $donation = 0; echo "Total donations so far: $".$donation; ?></p>
+            				<p class="lead navbar-text navbar-right navbar-dark bg-primary" style="background-color: #00aa00;"><?php echo "Total donations so far: $".$donation; ?></p>
             			</li>
           			</ul><br>
         		</div>
     
         		<div class="col-sm-9">
           			<h4><small>RECENT POSTS</small></h4>
-          			<hr>
+          			<hr><img src="construction-banner.png" height="150">
           			<h2>Under Construction</h2>
                 </div>
         	</div>

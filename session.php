@@ -15,6 +15,12 @@
     mysqli_stmt_fetch($query);
     mysqli_stmt_close($query);
     
+    // Initialise donation amount
+    $donation = 0;
+    
+    // Initialise full name
+    $fullname = "";
+    
     if (! isset($username))
     {
         // Close the DB connection
