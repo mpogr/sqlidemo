@@ -19,7 +19,7 @@
     $donation = 0;
     
     // Initialise full name
-    $fullname = "";
+    $full_name = "";
     
     if (! isset($username))
     {
