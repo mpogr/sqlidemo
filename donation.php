@@ -20,8 +20,8 @@
     mysqli_stmt_close($query);
         
     // Compare the keys
-    if($secretkey == $currentkey)
-    {
+    //if($secretkey == $currentkey)
+    //{
         // Increase the amount of donation by the provided one 
         $donation = $donation + $amount;
             
@@ -40,7 +40,7 @@
             
         // Close the query statement
         mysqli_stmt_close($query);
-    }
+    //}
         
     // Close the DB connection
     mysqli_close($connection);
