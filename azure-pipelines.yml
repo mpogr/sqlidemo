@@ -1,5 +1,6 @@
 # Starter pipeline
-- task: Security static source code analysis@2019
+
+task: Security static source code analysis@2019
   inputs:
     CheckmarxService: 'CxSAST 8.9'
     projectName: 'PHP On Github'
