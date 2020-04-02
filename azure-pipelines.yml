@@ -4,7 +4,7 @@
     CheckmarxService: 'CxSAST 8.9'
     projectName: 'PHP On Github'
     preset: 'Checkmarx Default'
-    fullTeamName: '\CxServer'
+    fullTeamName: 'CxServer'
     incScan: false
     high: '10'
 # Start with a minimal pipeline that you can customize to build and deploy your code.
