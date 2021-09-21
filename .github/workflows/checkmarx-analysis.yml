@@ -26,7 +26,7 @@ jobs:
     - name: Checkmarx CxFlow Action
       uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.0
       with:
-        project: ${{ github.repository.name }}
+        project: SQLiDemo
         params: --checkmarx.version=9.0
         team: '/CxServer'
         checkmarx_url: ${{ secrets.CHECKMARX_URL }}
