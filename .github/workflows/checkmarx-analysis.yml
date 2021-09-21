@@ -27,7 +27,7 @@ jobs:
       uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.0
       with:
         project: SQLiDemo
-        params: --checkmarx.version=9.0
+        params: --checkmarx.version=9.0 --incremental=false
         team: '/CxServer'
         checkmarx_url: ${{ secrets.CHECKMARX_URL }}
         checkmarx_username: ${{ secrets.CHECKMARX_USERNAME }}
