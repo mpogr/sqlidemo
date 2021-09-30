@@ -36,7 +36,7 @@ jobs:
       with:
         project:  GitHub-SQLiDemo-${{ github.head_ref }}
         team: /CxServer/SP/ANZ/SQLiDemo
-        preset: 'Checkmarx Express'
+        preset: 'Checkmarx Default'
         checkmarx_url: ${{ secrets.CHECKMARX_URL }}   # To be stored in GitHub Secrets.
         checkmarx_username: ${{ secrets.CHECKMARX_USERNAME }}  # To be stored in GitHub Secrets.
         checkmarx_password: ${{ secrets.CHECKMARX_PASSWORD }}  # To be stored in GitHub Secrets.
@@ -46,4 +46,4 @@ jobs:
         break_build: false
         scanners: sast
         bug_tracker: GitHubPull
-        params: --namespace=${{ github.repository_owner }} --repo-name=${{ github.event.repository.name }} --branch=${{ github.head_ref }} --merge-id=${{ github.event.number }} --http-read-timeout=600000
+        params: --namespace=${{ github.repository_owner }} --repo-name=${{ github.event.repository.name }} --branch=${{ github.head_ref }} --merge-id=${{ github.event.number }} --severity=High --severity=Medium --severity=Low --severity=Informational
